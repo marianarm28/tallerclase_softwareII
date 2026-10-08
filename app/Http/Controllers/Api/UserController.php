@@ -7,6 +7,8 @@ use App\Http\Requests\BulkStoreUsersRequest;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -14,7 +16,7 @@ class UserController extends Controller
     private const DEFAULT_PER_PAGE = 50;
     private const MAX_PER_PAGE = 100;
 
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $paginator = User::query()
             ->orderBy('id')
@@ -23,7 +25,7 @@ class UserController extends Controller
         return $this->paginated($paginator);
     }
 
-    public function emails(): JsonResponse
+    public function emails(Request $request): JsonResponse
     {
         $paginator = User::query()
             ->select(['id', 'email'])
@@ -32,7 +34,7 @@ class UserController extends Controller
 
         return $this->paginated($paginator);    }
 
-    public function overTwenty(): JsonResponse
+    public function overTwenty(Request $request): JsonResponse
     {
         $cutoff = Carbon::now()->subYears(20)->startOfDay();
 
